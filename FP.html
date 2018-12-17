@@ -1,0 +1,396 @@
+<html>
+    <head>
+        <title>Image to Base64 Encoder</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/1.0.1/base64.min.js"></script>
+    </head>
+    <body>
+        <section class="encoder">
+            <div class="encoder__inner">
+                <h1 class="encoder__heading">Image to Base64 Encoder</h1>
+                <div class="encoder__action">
+                    <input type="file" class="hidden" id="encoder_input" accept="image/*" multiple>
+                    <label for="encoder_input" class="encoder__action-btn">Choose Files</label>
+                </div>
+                <div class="encoder__list">
+                    <div class="list">
+                        <ul class="list__container js-list-container"></ul>
+                    </div>
+                </div>
+            </div> 
+            <p id="nama"></p>
+            <p id="size"></p>
+            <p id="type"></p>
+
+        </section>
+        
+        <div class="js-template hidden">
+            <li class="list__item">
+                <div class="list__media">
+                    <img class="list__media-img img-{{id}}" src="{{img_code}}">
+                </div>
+                <div class="list__info">
+                    <h3 class="list__info-heading">{{name}}</h3>
+        
+                    <i class="list__info-show-code js-show-code" onclick="showCode(this, '.img-{{id}}', '.field-{{id}}' );">Show base64 code</i>
+                    <input type="text" class="list__info-code-field js-field-item field-{{id}}" value="1" readonly>
+        
+                    <div class="list__info-bottom">
+                        <div class="list__info-bottom-item">
+                            Type: <span class="list__info-bottom-item--bold">{{type}}</span>
+                        </div>
+                        <div class="list__info-bottom-item">
+                            Size: <span class="list__info-bottom-item--bold">{{size}}</span>
+                        </div>
+                    </div>
+        
+                </div>
+            </li>
+        </div>         
+        <div style="width:100px">
+            <img src="data:image/jpeg;base64,/9j/4RiDRXhpZgAATU0AKgA..." width="100" height="50" alt="base64 test">               
+
+        </div>            
+    </body>
+</html>
+<style>
+     * {
+    	padding: 0;
+    	margin: 0;
+    	outline: 0;
+    	font-weight: normal;
+    	font-size: inherit;
+    	text-decoration: none;
+    	-webkit-box-sizing: border-box;
+    	box-sizing: border-box;
+    	color: inherit;
+    }
+
+    html {
+    	font-size: 18px;
+    }
+
+    @media all and (max-width: 1200px) {
+    	html {
+    		font-size: 17px;
+    	}
+    }
+
+    @media all and (max-width: 992px) {
+    	html {
+    		font-size: 16px;
+    	}
+    }
+
+    @media all and (max-width: 768px) {
+    	html {
+    		font-size: 15px;
+    	}
+    }
+
+    @media all and (max-width: 480px) {
+    	html {
+    		font-size: 13px;
+    	}
+    }
+
+    body {
+    	overflow-wrap: break-word;
+    	word-wrap: break-word;
+    	-ms-word-break: break-all;
+    	/* This is the dangerous one in WebKit, as it breaks things wherever */
+    	word-break: break-all;
+    	/* Instead use this non-standard one: */
+    	word-break: break-word;
+    	/* Adds a hyphen where the word breaks, if supported (No Blink) */
+    	-ms-hyphens: auto;
+    	-webkit-hyphens: auto;
+    	hyphens: auto;
+    	-webkit-text-size-adjust: 100%;
+    	-ms-text-size-adjust: 100%;
+    	-moz-text-size-adjust: 100%;
+    	text-rendering: optimizeLegibility;
+    	-webkit-text-decoration-skip: objects;
+    					text-decoration-skip: objects;
+    	-webkit-font-smoothing: antialiased;
+    	-webkit-tap-highlight-color: transparent;
+    	font-family: "Raleway", sans-serif;
+
+    	background-color: #f2f2f2;
+    	color: #555;
+    }
+
+    img {
+    	max-height: 100%;
+    	max-width: 100%;
+    	height: auto;
+    	width: auto;
+    }
+
+    .inviz,
+    .hidden {
+    	display: none;
+    }
+
+    ul, ol, li {
+    	list-style-type: none;
+    }
+
+
+    .encoder {
+    	padding: 20px;
+    	text-align: center;
+    }
+    .encoder__inner {
+    	max-width: 992px;
+    	background-color: #fff;
+    	border: 1px solid #d6d6d6;
+    	border-radius: 5px;
+    	margin: auto;
+    	padding: 20px 15px;
+    }
+    .encoder__heading {
+    	font-weight: bold;
+    	font-size: 1.4rem;
+    	margin-bottom: 30px;
+    }
+    .encoder__desc {
+    	font-size: 0.95rem;
+    	margin-bottom: 20px;
+    }
+    .encoder__action {
+    	margin-bottom: 30px;
+    }
+    .encoder__action-btn {
+    	text-transform: uppercase;
+    	font-size: .95rem;
+    	background-color: rgb(77, 212, 212);
+    	color: #fff;
+    	font-weight: bold;
+    	display: inline-block;
+    	padding: 20px 15px;
+    	width: 100%;
+    	max-width: 500px;
+    	cursor: pointer;
+    }
+
+    .encoder__action-btn:hover{
+        background-color: rgb(5, 153, 146);
+    }
+    .encoder__action-btn {
+    }
+    .encoder__list {
+    	text-align: left;
+    }
+
+
+    .list {
+
+    }
+    .list__container {
+
+    }
+    .list__item {
+    	display: -webkit-box;
+    	display: -ms-flexbox;
+    	display: flex;
+    	height: 160px;
+    	margin-bottom: 30px;
+    	border: 1px solid #111;
+    	padding: 5px;
+    }
+    .list__item:last-child {
+    	margin-bottom: 0;
+    }
+    .list__media {
+    	width: 150px;
+    	border: 1px solid #999;
+    
+    	position: relative;
+    }
+    .list__media-img {
+    	position: absolute;
+    	top: 0;
+    	left: 0;
+    	right: 0;
+    	bottom: 0;
+    	margin: auto;
+    }
+    .list__info {
+    	height: 100%;
+    	width: 100%;
+    	display: -webkit-box;
+    	display: -ms-flexbox;
+    	display: flex;
+    	-webkit-box-flex: 1;
+    	    -ms-flex: 1;
+    	        flex: 1;
+    	-webkit-box-orient: vertical;
+    	-webkit-box-direction: normal;
+    	    -ms-flex-direction: column;
+    	        flex-direction: column;
+    	padding: 0 10px;
+    }
+    .list__info-heading {
+    	font-size: 1.25rem;
+    	margin-bottom: 10px;
+    }
+    .list__info-code-field {
+    	padding: 5px;
+    	font-size: .9rem;
+    }
+    .list__info-code-field:not([value^='data']) {
+    	display: none;
+    }
+    .list__info-bottom {
+    	margin-top: auto;
+    	display: -webkit-box;
+    	display: -ms-flexbox;
+    	display: flex;
+    	-webkit-box-pack: end;
+    	    -ms-flex-pack: end;
+    	        justify-content: flex-end;
+    	font-size: 0.9rem;
+    }
+    .list__info-bottom-item {
+    	margin-left: 15px;
+    }
+    .list__info-bottom-item--bold {
+    	font-weight: bold;
+    }
+
+    .list__info-show-code {
+    	cursor: pointer;
+    	text-decoration: underline;
+    	margin-right: auto;
+    }
+
+    @media all and (max-width: 500px){
+    	.list__item {
+    		height: auto;
+    		-webkit-box-orient: vertical;
+    		-webkit-box-direction: normal;
+    		    -ms-flex-direction: column;
+    		        flex-direction: column;
+    	}
+    	.list__media {
+    		padding-top: 50%;
+    		margin: auto;
+    		margin-bottom: 20px;
+    	}
+    	.list__info-bottom {
+    		padding-top: 20px;
+    		-webkit-box-pack: center;
+    		    -ms-flex-pack: center;
+    		        justify-content: center;
+    		-ms-flex-wrap: wrap;
+    		    flex-wrap: wrap;
+    	}
+    	.list__info-bottom-item {
+    		margin: 10px 5px 0;
+    	}
+    }
+</style>
+
+<script>
+    const file_input = document.querySelector("input[type=file]");
+    const img_element = document.querySelector(".js-img");
+    const list_container = document.querySelector(".js-list-container");
+    const template = document.querySelector(".js-template").innerHTML;
+
+
+    /*nerima inputan file*/
+    file_input.addEventListener("change", function(e){
+    	let images = file_input.files;
+        /*ngitung banyaknya jumlah gambar yang dimasukkan*/
+    	let images_len = images.length;
+
+    	if (!images_len)
+    		return false;
+
+    	list_container.innerHTML = '';
+
+    	for (let i = 0; i < images_len; i++){
+    		let img = images[i];           
+            document.getElementById("nama").innerHTML = img['type'];
+            
+            let name = nameShortiner(img['name'], 50);
+    		let size = bytesToSize(img['size']);
+    		let type = img['type'];
+
+            /*ngambil type yang bagian belakang*/
+    		type = (type.slice(type.indexOf('/') + 1)).toUpperCase();
+
+    		let reader = new FileReader();
+
+    		reader.onload = function(e){
+    			let tmp = template;
+
+    			tmp = replaceTemplate(tmp, {
+    				'name' : name,
+    				'id' : i,
+    				'size' : size,
+    				'type' : type,
+    				'img_code' : e.target.result,
+    			});
+
+    			list_container.innerHTML += tmp;
+    		};
+    		reader.readAsDataURL(img);
+    	}
+
+    });
+
+
+    function nameShortiner(name, max_len){
+    	if (!name)
+    		return false;
+
+    	max_len = max_len || 255;
+    	name_len = name.length;
+
+    	type = name.substring(name.lastIndexOf('.') + 1);
+    	name = name.substring(0, name.lastIndexOf('.'));
+
+    	return name.substring(0, max_len) + ((name_len > max_len)?'...':'.') + type;
+    }
+
+    /**
+    * функция - шаблонизатор. 
+    */
+    function replaceTemplate(replaceText, replaceObj, before = '{{', after = '}}'){
+    	for(let text in replaceObj){
+    		replaceText = replaceText.split(before + text + after).join(replaceObj[text]);;
+    	}
+    	return replaceText;
+    }
+
+    function bytesToSize(bytes) {
+    	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    	if (bytes == 0) return '0 Byte';
+    	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    	return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    };
+
+    function decodebabi(){
+
+    }
+
+    function showCode(_this, img_selector, field_selector){
+
+    	let img_item = document.querySelector(img_selector);
+    	let field_item = document.querySelector(field_selector);
+
+    	let all_fields = document.querySelectorAll(".js-field-item[value^='data']");
+
+    	for (let field of all_fields){
+    		field.setAttribute("value", '');
+    	}
+
+    	setTimeout(function(){
+    		field_item.setAttribute("value", img_item.getAttribute("src"));
+    	}, 50);
+
+
+    	return true;
+    }
+</script>
