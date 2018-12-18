@@ -93,7 +93,7 @@ $(function(){
 				// Use the CryptoJS library and the AES cypher to encrypt the 
 				// contents of the file, held in e.target.result, with the password
 
-				var encrypted = CryptoJS.AES.encrypt(e.target.result, password);
+				var encrypted = CryptoJS.DES.encrypt(e.target.result, password);
 
 				// The download attribute will cause the contents of the href
 				// attribute to be downloaded when clicked. The download attribute
@@ -116,7 +116,7 @@ $(function(){
 
 			reader.onload = function(e){
 
-				var decrypted = CryptoJS.AES.decrypt(e.target.result, password)
+				var decrypted = CryptoJS.DES.decrypt(e.target.result, password)
 										.toString(CryptoJS.enc.Latin1);
 
 				if(!/^data:/.test(decrypted)){
